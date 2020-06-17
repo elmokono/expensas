@@ -1,0 +1,83 @@
+﻿@page
+@model ExpensasAbbinatura.Pages.Installments.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Mis Expensas</h1>
+<form name="form1" method="post">
+    <p>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Seleccione el Año (@Model.SelectedYear)
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                @foreach (var item in Model.Years)
+                {
+                    <a class="dropdown-item year" data-value="@item" href="#">@item</a>
+                }
+            </div>
+        </div>
+        @Html.HiddenFor(x => x.SelectedYear)
+    </p>
+</form>
+<table id="table-installments" class="table" width="100%">
+    <thead>
+        <tr><th>Estado</th><th>Periodo</th><th>Detalle</th></tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Installments)
+        {
+            <tr>
+                <td><a class="badge @(item.Status.InstallmentStatusID == "PENDING" ? "badge-danger" : "badge-success")">@(item.Status.InstallmentStatusID == "PENDING" ? "Sin Pagar" : "Pagada")</a></td>
+                <td>@item.When.ToString("dd/MM/yyyy")</td>
+                <td>
+                    <div class="row">
+                        <table id="table-installment-concepts" class="table table-sm table-bordered" width="100%">                            
+                            <tbody>
+                                @foreach (var concept in item.InstallmentConcepts)
+                                {
+                                    <tr>
+                                        <td>@concept.Concept.Description</td>
+                                        <td>@concept.Concept.ConceptType.Description</td>
+                                        <td align="right">$@concept.Amount</td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3" align="right"><b>$@item.Total</b></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="2">Total Deuda</td>
+            <td align="right">$@Model.Installments.Where(x => x.Status.InstallmentStatusID == "PENDING").Sum(x => x.Total)</td>
+        </tr>
+    </tfoot>
+</table>
+
+@section scripts
+{
+    <script>
+
+        $(document).ready(function () {
+
+            $('.dropdown-item.year').click(function () {
+                $('#SelectedYear').val($(this).data('value'));
+                $('form')[0].submit();
+            });
+
+        });
+
+    </script>
+
+
+}

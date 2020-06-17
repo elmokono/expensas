@@ -1,0 +1,122 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Portal";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="text-left">
+            <h1 class="display-4">Portal del Vecino</h1>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="alert alert-info">
+            <i class="fas fa-coins"></i> Mis Expensas | Periodo Actual <b>@DateTime.Now.ToString("MMMM/yyyy")</b>
+        </div>
+
+        <table id="table-installments" class="table" width="100%">
+            <thead>
+                <tr><th>Estado</th><th>Periodo</th><th align="right">Total</th></tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Installments)
+                {
+                    <tr>
+                        <td><a class="badge @(item.Status.InstallmentStatusID == "PENDING" ? "badge-danger" : "badge-success")">@(item.Status.InstallmentStatusID == "PENDING" ? "Sin Pagar" : "Pagada")</a></td>
+                        <td><a href="#" class="installment-detail" data-json='@item.InstallmentConceptsJSON' data-id="@item.InstallmentID">@item.When.ToString("dd/MM/yyyy")</a></td>
+                        <td align="right">$@item.Total</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2">Total Deuda</td>
+                    <td align="right">$@Model.Installments.Where(x => x.Status.InstallmentStatusID == "PENDING").Sum(x => x.Total)</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div class="col-md-6">
+        <div class="alert alert-warning">
+            <i class="fas fa-video"></i> Puerta Calle</b>
+        </div>
+        <img style="width: 100%" src="http://abbinatura.ddns.net:8888/videostream.cgi?user=admin&pwd=mokono22&resolution=32&rate=15" />
+    </div>
+</div>
+
+
+
+@section Templates
+{
+    <div id="installment-detail-popup" class="modal" tabindex="-1" role="dialog"></div>
+}
+
+@section Scripts
+{
+    <script type="text/x-handlebars-template" id="installment-detail-template">
+
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detalle de la Expensa (#{{installmentID}})</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table id="table-installment-concepts" class="table table-responsive" width="100%">
+                        <thead>
+                            <tr><th>Concepto</th><th>Tipo</th><th>Importe</th></tr>
+                        </thead>
+                        <tbody>
+                            {{#each InstallmentConcepts}}
+                            <tr>
+                                <td>{{Concept.Description}}</td>
+                                <td>{{Concept.ConceptType.Description}}</td>
+                                <td align="right">${{Amount}}</td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="2">Total Deuda</td>
+                                <td align="right">${{Total}}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+
+    </script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $('#table-installments a.installment-detail').click(function () {
+
+                var json = $(this).data('json')
+
+                var template = Handlebars.compile($('#installment-detail-template').html());
+                $('#installment-detail-popup').html(template(json)).modal();
+
+                //var installmentID = $(this).data('id')
+                //$.getJSON('/Installments/Details?id=' + installmentID, function (data) {
+                //
+                //});
+
+            });
+
+
+        });
+
+    </script>
+}
+
