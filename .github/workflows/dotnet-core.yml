@@ -18,8 +18,8 @@ jobs:
       with:
         dotnet-version: 3.1.101
     - name: Install dependencies
-      run: dotnet ExpensasWithAuth.sln restore
+      run: dotnet restore ExpensasAbbinatura.csproj
     - name: Build
-      run: dotnet ExpensasWithAuth.sln build --configuration Release --no-restore
+      run: dotnet build --configuration Release --no-restore ExpensasAbbinatura.csproj
     - name: Test
-      run: dotnet ExpensasWithAuth.sln test --no-restore --verbosity normal
+      run: dotnet test --no-restore --verbosity normal ExpensasAbbinatura.csproj
