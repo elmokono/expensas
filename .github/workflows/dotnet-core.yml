@@ -14,5 +14,6 @@ jobs:
       with:
         ftp-server: sftp://34.105.44.99:22/
         ftp-username: 'elmokono'
-        ftp-password: ''
+        ftp-password: 'no-password!'
+        local-dir: '/home/elmokono/www/publish/expensas'
         git-ftp-args: --insecure --key 'private_key.pem'
