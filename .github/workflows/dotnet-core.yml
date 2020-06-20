@@ -23,3 +23,14 @@ jobs:
       run: dotnet build --configuration Release --no-restore ExpensasAbbinatura.csproj
     - name: Test
       run: dotnet test --no-restore --verbosity normal ExpensasAbbinatura.csproj
+    - name: Publish
+      run: dotnet publish --verbosity normal ExpensasAbbinatura.csproj
+    - name: SFTP Deploy
+      uses: wlixcc/SFTP-Deploy-Action@v1.0
+      with:
+        username: 'elmokono'
+        server: '34.105.44.99'
+        private_key: ${{ secrets.SSH_PRIVATE_KEY }} 
+        local_path: './static/*'
+        remote_path: '/home/elmokono/www/publish/expensas'
+        args: '-o ConnectTimeout=5'
