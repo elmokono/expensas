@@ -12,8 +12,7 @@ jobs:
     - name: FTP-Deploy-Action
       uses: SamKirkland/FTP-Deploy-Action@3.1.1
       with:
-        ftp-server: ftps://34.105.44.99:22/
+        ftp-server: "sftp://34.105.44.99:22//home/elmokono/www/publish/expensas/"
         ftp-username: elmokono
         ftp-password: no-password
-        local-dir: /home/elmokono/www/publish/expensas
-        git-ftp-args: --insecure --key 'private_key.pem'
+        git-ftp-args: --insecure --key './private_key.pem'
