@@ -13,11 +13,18 @@
 </div>
 <div class="row">
     <div class="col-md-6">
-        <div class="alert alert-info">
-            <i class="fas fa-coins"></i> Mis Expensas | Periodo Actual <b>@DateTime.Now.ToString("MMMM/yyyy")</b>
+        <div class="">
+            <div class="float-left">
+                <div class="alert alert-info">
+                    <i class="fas fa-coins"></i> Mis Expensas | Periodo Actual <b>@DateTime.Now.ToString("MMMM/yyyy")</b>
+                </div>
+            </div>
+            <div class="float-right">
+                <button type="button" class="btn btn-primary" onclick="location='/Installments/'">Ver Todo</button>
+            </div>
         </div>
 
-        <table id="table-installments" class="table" width="100%">
+        <table id="table-installments" class="table table-sm" width="100%">
             <thead>
                 <tr><th>Estado</th><th>Periodo</th><th align="right">Total</th></tr>
             </thead>

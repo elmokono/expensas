@@ -2,7 +2,7 @@
 @model ExpensasAbbinatura.Pages.Installments.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Portal";
 }
 
 <h1>Mis Expensas</h1>
@@ -22,47 +22,99 @@
         @Html.HiddenFor(x => x.SelectedYear)
     </p>
 </form>
-<table id="table-installments" class="table" width="100%">
-    <thead>
-        <tr><th>Estado</th><th>Periodo</th><th>Detalle</th></tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Installments)
-        {
-            <tr>
-                <td><a class="badge @(item.Status.InstallmentStatusID == "PENDING" ? "badge-danger" : "badge-success")">@(item.Status.InstallmentStatusID == "PENDING" ? "Sin Pagar" : "Pagada")</a></td>
-                <td>@item.When.ToString("dd/MM/yyyy")</td>
-                <td>
-                    <div class="row">
-                        <table id="table-installment-concepts" class="table table-sm table-bordered" width="100%">                            
-                            <tbody>
-                                @foreach (var concept in item.InstallmentConcepts)
-                                {
-                                    <tr>
-                                        <td>@concept.Concept.Description</td>
-                                        <td>@concept.Concept.ConceptType.Description</td>
-                                        <td align="right">$@concept.Amount</td>
-                                    </tr>
-                                }
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="3" align="right"><b>$@item.Total</b></td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                </td>
-            </tr>
-        }
-    </tbody>
-    <tfoot>
-        <tr>
-            <td colspan="2">Total Deuda</td>
-            <td align="right">$@Model.Installments.Where(x => x.Status.InstallmentStatusID == "PENDING").Sum(x => x.Total)</td>
-        </tr>
-    </tfoot>
-</table>
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link @(Model.ClassicView ? "active" : "")" id="classic-view-tab" data-view="classic" data-toggle="tab" href="#classic-view" role="tab" aria-controls="classic-view" aria-selected="@Model.ClassicView.ToString().ToLower()">Vista Clasica</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(Model.ClassicView ? "" : "active")" id="compact-view-tab" data-view="compact" data-toggle="tab" href="#compact-view" role="tab" aria-controls="compact-view" aria-selected="@((!Model.ClassicView).ToString().ToLower())">Vista Simplificada</a>
+    </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade  @(Model.ClassicView ? "show active" : "")" id="classic-view" role="tabpanel" aria-labelledby="classic-view-tab">
+
+        <table id="table-installments" class="table" width="100%">
+            <thead>
+                <tr><th>Estado</th><th>Periodo</th><th>Detalle</th></tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Installments)
+                {
+                    <tr>
+                        <td><a class="badge @(item.Status.InstallmentStatusID == "PENDING" ? "badge-danger" : "badge-success")">@(item.Status.InstallmentStatusID == "PENDING" ? "Sin Pagar" : "Pagada")</a></td>
+                        <td>@item.When.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            <div class="row">
+                                <table id="table-installment-concepts" class="table table-sm table-bordered" width="100%">
+                                    <tbody>
+                                        @foreach (var concept in item.InstallmentConcepts)
+                                        {
+                                            <tr>
+                                                <td>@concept.Concept.Description</td>
+                                                <td>@concept.Concept.ConceptType.Description</td>
+                                                <td align="right">$@concept.Amount</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="3" align="right"><b>$@item.Total</b></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2">Total Deuda</td>
+                    <td align="right">$@Model.Installments.Where(x => x.Status.InstallmentStatusID == "PENDING").Sum(x => x.Total)</td>
+                </tr>
+            </tfoot>
+        </table>
+
+    </div>
+    <div class="tab-pane fade  @(Model.ClassicView ? "" : "show active")" id="compact-view" role="tabpanel" aria-labelledby="compact-view-tab">
+        <table class="table" width="100%">
+            <thead>
+                <tr>
+                    <th>Concepto</th>
+                    @foreach (var inst in Model.Installments)
+                    {
+                        <th>@inst.When.ToString("dd/MM/yyyy")</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Installments.SelectMany(x => x.InstallmentConcepts.Select(y => y.Concept)).Distinct().OrderBy(x => x.ConceptType.Description).ThenBy(x => x.Description))
+                {
+                    <tr>
+                        <td>@item.Description</td>
+                        @foreach (var inst in Model.Installments)
+                        {
+                            <td>$@(inst.InstallmentConcepts.FirstOrDefault(x => x.Concept.ConceptID == item.ConceptID)?.Amount ?? 0)</td>
+                        }
+
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>Total</td>
+                    @foreach (var inst in Model.Installments)
+                    {
+                        <td><b>$@inst.InstallmentConcepts.Sum(x => x.Amount)</b></td>
+                    }
+                </tr>
+            </tfoot>
+        </table>
+
+    </div>
+</div>
+
 
 @section scripts
 {
@@ -74,6 +126,8 @@
                 $('#SelectedYear').val($(this).data('value'));
                 $('form')[0].submit();
             });
+
+            $('#home-tab')
 
         });
 
