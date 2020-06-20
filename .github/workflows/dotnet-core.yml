@@ -1,36 +1,17 @@
-name: .NET Core
-
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
-
+on: push
+name: Publish Website over SFTP
 jobs:
-  build:
-
+  FTP-Deploy-Action:
+    name: FTP-Deploy-Action
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+    - uses: actions/checkout@v2.1.0
       with:
-        dotnet-version: 3.1.101
-    - name: Install dependencies
-      run: dotnet restore ExpensasAbbinatura.csproj
-    - name: Build
-      run: dotnet build --configuration Release --no-restore ExpensasAbbinatura.csproj
-    - name: Test
-      run: dotnet test --no-restore --verbosity normal ExpensasAbbinatura.csproj
-    - name: Publish
-      run: dotnet publish --verbosity normal ExpensasAbbinatura.csproj
-    - name: SFTP Deploy
-      uses: wlixcc/SFTP-Deploy-Action@v1.0
+        fetch-depth: 2
+
+    - name: FTP-Deploy-Action
+      uses: SamKirkland/FTP-Deploy-Action@3.1.1
       with:
-        username: 'elmokono'
-        server: '34.105.44.99'
-        private_key: ${{ secrets.SSH_PRIVATE_KEY }} 
-        local_path: '/home/runner/work/expensas/expensas/bin/Debug/netcoreapp3.1/publish/*'
-        remote_path: '/home/elmokono/www/publish/expensas'
-        args: '-o ConnectTimeout=60'
+        ftp-server: sftp://34.105.44.99:22/
+        ftp-username: 'elmokono'
+        git-ftp-args: --insecure --key 'private_key.pem'
