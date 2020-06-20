@@ -14,4 +14,5 @@ jobs:
       with:
         ftp-server: sftp://34.105.44.99:22/
         ftp-username: 'elmokono'
+        ftp-password: ''
         git-ftp-args: --insecure --key 'private_key.pem'
