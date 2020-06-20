@@ -12,29 +12,30 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.101
+        
     - name: Install dependencies
       run: dotnet restore ExpensasAbbinatura.csproj
+
     - name: Build
       run: dotnet build --configuration Release --no-restore ExpensasAbbinatura.csproj
+
     - name: Test
       run: dotnet test --no-restore --verbosity normal ExpensasAbbinatura.csproj
+
     - name: Publish
       run: dotnet publish --verbosity normal ExpensasAbbinatura.csproj
-  
-  deploy_job:
-    runs-on: ubuntu-latest
-    name: deploy
-    steps:
-      - name: checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: deploy file
-        uses:  swznd/sftp-deploy@master
-        with:
-          host: 34.105.44.99
-          user: elmokono
-          private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-          local_path: /home/runner/work/expensas/expensas/bin/Debug/netcoreapp3.1/publish/
-          remote_path: /www/publish/expensas
-          ignore: .github/**
+
+    - name: checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: deploy file
+      uses:  swznd/sftp-deploy@master
+      with:
+        host: 34.105.44.99
+        user: elmokono
+        private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+        local_path: /home/runner/work/expensas/expensas/bin/Debug/netcoreapp3.1/publish/
+        remote_path: /www/publish/expensas
+        ignore: .github/**
