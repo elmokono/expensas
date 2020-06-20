@@ -50,7 +50,7 @@ namespace ExpensasAbbinatura
                 {
                     options.LoginPath = "/Account/Login";
                     options.LogoutPath = "/Account/Logout";
-                    options.ExpireTimeSpan = new TimeSpan(0, 0, 60);
+                    options.ExpireTimeSpan = new TimeSpan(24, 0, 0);
                 });
         }
 
