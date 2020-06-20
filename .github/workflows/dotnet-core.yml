@@ -33,4 +33,4 @@ jobs:
         private_key: ${{ secrets.SSH_PRIVATE_KEY }} 
         local_path: './static/*'
         remote_path: '/home/elmokono/www/publish/expensas'
-        args: '-o ConnectTimeout=5'
+        args: '-o ConnectTimeout=60'
