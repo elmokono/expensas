@@ -26,11 +26,15 @@ jobs:
 
   publish:
   
-    steps:
+   runs-on: ubuntu-latest
+
+   steps:
       - name: Publish
         run: dotnet publish --verbosity normal ExpensasAbbinatura.csproj
   
   deploy:
+
+    runs-on: ubuntu-latest
 
     steps:
     - name: SFTP Deploy
