@@ -1,18 +1,21 @@
-on: push
-name: Publish Website over SFTP
-jobs:
-  FTP-Deploy-Action:
-    name: FTP-Deploy-Action
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2.1.0
-      with:
-        fetch-depth: 2
+on:
+  push:
+    branches: [ master ]
 
-    - name: FTP-Deploy-Action
-      uses: SamKirkland/FTP-Deploy-Action@3.1.1
-      with:
-        ftp-server: "sftp://34.105.44.99:22/home/elmokono/www/publish/expensas/"
-        ftp-username: elmokono
-        ftp-password: no-password
-        git-ftp-args: --insecure --key './private_key.pem'
+jobs:
+  deploy_job:
+    runs-on: ubuntu-latest
+    name: deploy
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: deploy file
+        uses:  swznd/sftp-deploy@master
+        with:
+          host: 34.105.44.99
+          user: elmokono
+          private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          remote_path: /home/elmokono/www/publish/expensas
+          ignore: .github/**
