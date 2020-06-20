@@ -17,5 +17,5 @@ jobs:
           host: 34.105.44.99
           user: elmokono
           private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-          remote_path: /home/elmokono/www/publish/expensas
+          remote_path: /www/publish/expensas
           ignore: .github/**
