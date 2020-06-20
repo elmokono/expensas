@@ -23,8 +23,16 @@ jobs:
       run: dotnet build --configuration Release --no-restore ExpensasAbbinatura.csproj
     - name: Test
       run: dotnet test --no-restore --verbosity normal ExpensasAbbinatura.csproj
+
+  publish:
+  
+  steps:
     - name: Publish
       run: dotnet publish --verbosity normal ExpensasAbbinatura.csproj
+  
+  deploy:
+
+    steps:
     - name: SFTP Deploy
       uses: wlixcc/SFTP-Deploy-Action@v1.0
       with:
