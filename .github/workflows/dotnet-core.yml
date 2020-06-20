@@ -12,7 +12,7 @@ jobs:
     - name: FTP-Deploy-Action
       uses: SamKirkland/FTP-Deploy-Action@3.1.1
       with:
-        ftp-server: sftp://34.105.44.99:22/
+        ftp-server: ftps://34.105.44.99:22/
         ftp-username: elmokono
         ftp-password: no-password
         local-dir: /home/elmokono/www/publish/expensas
