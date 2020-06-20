@@ -26,9 +26,9 @@ jobs:
 
   publish:
   
-  steps:
-    - name: Publish
-      run: dotnet publish --verbosity normal ExpensasAbbinatura.csproj
+    steps:
+      - name: Publish
+        run: dotnet publish --verbosity normal ExpensasAbbinatura.csproj
   
   deploy:
 
