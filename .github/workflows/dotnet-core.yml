@@ -12,7 +12,7 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.101
-
+        
     - name: Install dependencies
       run: dotnet restore ExpensasAbbinatura.csproj
 
@@ -25,10 +25,10 @@ jobs:
     - name: Publish
       run: dotnet publish --verbosity normal ExpensasAbbinatura.csproj
 
-    #- name: checkout
-    #  uses: actions/checkout@v2
-    #  with:
-    #    fetch-depth: 0
+    - name: checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
 
     - name: deploy file
       uses:  swznd/sftp-deploy@master
