@@ -37,5 +37,5 @@ jobs:
         user: elmokono
         private_key: ${{ secrets.SSH_PRIVATE_KEY }}
         local_path: /home/runner/work/expensas/expensas/bin/Debug/netcoreapp3.1/publish/
-        remote_path: /www/publish/expensas
+        remote_path: /www/publish
         ignore: .github/**
