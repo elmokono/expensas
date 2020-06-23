@@ -23,8 +23,16 @@ namespace ExpensasAbbinatura.Models
         public DbSet<InstallmentConcept> InstallmentConcepts { get; set; }
         public DbSet<Concept> Concepts { get; set; }
         public DbSet<ConceptType> ConceptTypes { get; set; }
+        public DbSet<Building> Buildings { get; set; }
 
         public ExpensasContext(DbContextOptions<ExpensasContext> options) : base(options) { }
+    }
+
+    public class Building
+    {
+        public int BuildingID { get; set; }
+        public string Name { get; set; }
+        public string StreetAddress { get; set; }
     }
 
     public class Person
@@ -34,6 +42,7 @@ namespace ExpensasAbbinatura.Models
         public string Department { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+        public Building Building { get; set; }
         public List<Installment> Installments { get; } = new List<Installment>();
     }
 

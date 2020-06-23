@@ -7,6 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200623014040_building.cs" />
+    <Compile Remove="Migrations\20200623014040_building.Designer.cs" />
+    <Compile Remove="Migrations\20200623014408_building.cs" />
+    <Compile Remove="Migrations\20200623014408_building.Designer.cs" />
+    <Compile Remove="Migrations\20200623014556_add-building.cs" />
+    <Compile Remove="Migrations\20200623014556_add-building.Designer.cs" />
+    <Compile Remove="Migrations\20200623014637_add-building.cs" />
+    <Compile Remove="Migrations\20200623014637_add-building.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove=".gitignore" />
     <None Remove="expensas.db" />
     <None Remove="ExpensasAbbinatura.zip" />
   </ItemGroup>
