@@ -53,14 +53,15 @@ namespace ExpensasAbbinatura.Pages.Installments
         IOrderedQueryable<Installment> GetInstallments()
         {
             return _context.Installments
-                      .Include(x => x.InstallmentConcepts)
-                      .ThenInclude(x => x.Concept)
-                      .ThenInclude(x => x.ConceptType)
-                      .Include(x => x.Status)
-                      .Include(x => x.Person)
-                      .Where(x => x.Person.PersonID == 1)
-                      .Where(x => x.When.Year == SelectedYear)
-                      .OrderBy(x => x.When);
+                .AsNoTracking()
+                .Include(x => x.InstallmentConcepts)
+                    .ThenInclude(x => x.Concept)
+                    .ThenInclude(x => x.ConceptType)
+                .Include(x => x.Status)
+                .Include(x => x.Person)
+                .Where(x => x.Person.Email == User.FindFirst(System.Security.Claims.ClaimTypes.Email).Value)
+                .Where(x => x.When.Year == SelectedYear)
+                .OrderBy(x => x.When);
         }
 
     }

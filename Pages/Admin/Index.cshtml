@@ -1,0 +1,58 @@
+﻿@page
+@model ExpensasAbbinatura.Pages.Admin.IndexModel
+@{
+    ViewData["Title"] = "Administracion de Inquilinos";
+}
+
+<h1>Administracion de Personas</h1>
+<form name="form1" method="post">
+    <p>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Edificio @Model.Buildings.First(x => x.BuildingId == Model.SelectedBuildingId).Name
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                @foreach (var item in Model.Buildings)
+                {
+                    <a class="dropdown-item building" data-value="@item.BuildingId" href="#">@item.Name - @item.StreetAddress</a>
+                }
+            </div>
+        </div>
+        @Html.HiddenFor(x => x.SelectedBuildingId)
+    </p>
+</form>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Persona</th>
+                    <th>Deuda</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Persons)
+                {
+                <tr>
+                    <td>@item.FullName</td>
+                    <td align="right">$@item.TotalDebt</td>
+                </tr>
+                }
+            </tbody>
+            <tfoot></tfoot>
+        </table>
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $('.dropdown-item.building').click(function () {
+                $('#SelectedBuildingId').val($(this).data('value'));
+                $('form')[0].submit();
+            });
+        });
+    </script>
+}

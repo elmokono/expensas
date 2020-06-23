@@ -42,7 +42,7 @@
                 @foreach (var item in Model.Installments)
                 {
                     <tr>
-                        <td><a class="badge @(item.Status.InstallmentStatusID == "PENDING" ? "badge-danger" : "badge-success")">@(item.Status.InstallmentStatusID == "PENDING" ? "Sin Pagar" : "Pagada")</a></td>
+                        <td><a class="badge @(item.Status.InstallmentStatusId == "PENDING" ? "badge-danger" : "badge-success")">@(item.Status.InstallmentStatusId == "PENDING" ? "Sin Pagar" : "Pagada")</a></td>
                         <td>@item.When.ToString("dd/MM/yyyy")</td>
                         <td>
                             <div class="row">
@@ -71,7 +71,7 @@
             <tfoot>
                 <tr>
                     <td colspan="2">Total Deuda</td>
-                    <td align="right">$@Model.Installments.Where(x => x.Status.InstallmentStatusID == "PENDING").Sum(x => x.Total)</td>
+                    <td align="right">$@Model.Installments.Where(x => x.Status.InstallmentStatusId == "PENDING").Sum(x => x.Total)</td>
                 </tr>
             </tfoot>
         </table>
@@ -95,7 +95,7 @@
                         <td>@item.Description</td>
                         @foreach (var inst in Model.Installments)
                         {
-                            <td>$@(inst.InstallmentConcepts.FirstOrDefault(x => x.Concept.ConceptID == item.ConceptID)?.Amount ?? 0)</td>
+                            <td>$@(inst.InstallmentConcepts.FirstOrDefault(x => x.Concept.ConceptId == item.ConceptId)?.Amount ?? 0)</td>
                         }
 
                     </tr>

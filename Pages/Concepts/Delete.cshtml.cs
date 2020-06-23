@@ -28,7 +28,7 @@ namespace ExpensasAbbinatura.Pages.Concepts
                 return NotFound();
             }
 
-            Concept = await _context.Concepts.FirstOrDefaultAsync(m => m.ConceptID == id);
+            Concept = await _context.Concepts.FirstOrDefaultAsync(m => m.ConceptId == id);
 
             if (Concept == null)
             {

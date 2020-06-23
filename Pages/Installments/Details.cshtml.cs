@@ -30,7 +30,7 @@ namespace ExpensasAbbinatura.Pages.Installments
             Installment = await _context.Installments
                 .Include(x => x.InstallmentConcepts)
                 .ThenInclude(x => x.Concept)
-                .FirstOrDefaultAsync(m => m.InstallmentID == id);
+                .FirstOrDefaultAsync(m => m.InstallmentId == id);
 
             if (Installment == null)
             {

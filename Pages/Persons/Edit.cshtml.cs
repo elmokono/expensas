@@ -29,7 +29,7 @@ namespace ExpensasAbbinatura.Pages.Persons
                 return NotFound();
             }
 
-            Person = await _context.Persons.FirstOrDefaultAsync(m => m.PersonID == id);
+            Person = await _context.Persons.FirstOrDefaultAsync(m => m.PersonId == id);
 
             if (Person == null)
             {
@@ -55,7 +55,7 @@ namespace ExpensasAbbinatura.Pages.Persons
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PersonExists(Person.PersonID))
+                if (!PersonExists(Person.PersonId))
                 {
                     return NotFound();
                 }
@@ -70,7 +70,7 @@ namespace ExpensasAbbinatura.Pages.Persons
 
         private bool PersonExists(int id)
         {
-            return _context.Persons.Any(e => e.PersonID == id);
+            return _context.Persons.Any(e => e.PersonId == id);
         }
     }
 }

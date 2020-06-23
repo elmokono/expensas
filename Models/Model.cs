@@ -24,37 +24,47 @@ namespace ExpensasAbbinatura.Models
         public DbSet<Concept> Concepts { get; set; }
         public DbSet<ConceptType> ConceptTypes { get; set; }
         public DbSet<Building> Buildings { get; set; }
-
+        
         public ExpensasContext(DbContextOptions<ExpensasContext> options) : base(options) { }
     }
 
     public class Building
     {
-        public int BuildingID { get; set; }
+        public int BuildingId { get; set; }
         public string Name { get; set; }
         public string StreetAddress { get; set; }
     }
 
     public class Person
     {
-        public int PersonID { get; set; }
+        public int PersonId { get; set; }
         public string FullName { get; set; }
         public string Department { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public Building Building { get; set; }
+        public string RoleCode { get; set; }
         public List<Installment> Installments { get; } = new List<Installment>();
+
+        [ScaffoldColumn(false)]
+        public decimal TotalDebt
+        {
+            get
+            {
+                return Installments.Where(x => x.Status.InstallmentStatusId == "PENDING").Sum(x => x.Total);
+            }
+        }
     }
 
     public class InstallmentStatus
     {
-        public string InstallmentStatusID { get; set; }
+        public string InstallmentStatusId { get; set; }
         public string Description { get; set; }
     }
 
     public class Installment
     {
-        public int InstallmentID { get; set; }
+        public int InstallmentId { get; set; }
         public Person Person { get; set; }
         public DateTime When { get; set; }
         public InstallmentStatus Status { get; set; }
@@ -82,7 +92,7 @@ namespace ExpensasAbbinatura.Models
 
     public class InstallmentConcept
     {
-        public int InstallmentConceptID { get; set; }
+        public int InstallmentConceptId { get; set; }
         public Concept Concept { get; set; }
         public decimal Amount { get; set; }
         public string Comments { get; set; }
@@ -90,14 +100,14 @@ namespace ExpensasAbbinatura.Models
 
     public class ConceptType
     {
-        public int ConceptTypeID { get; set; }
+        public int ConceptTypeId { get; set; }
         [DisplayName("Tipo")]
         public string Description { get; set; }
     }
 
     public class Concept
     {
-        public int ConceptID { get; set; }
+        public int ConceptId { get; set; }
         [DisplayName("Concepto")]
         public string Description { get; set; }
         public ConceptType ConceptType { get; set; }

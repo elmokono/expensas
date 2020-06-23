@@ -25,28 +25,28 @@ namespace ExpensasAbbinatura.Migrations
                 name: "Persons",
                 columns: table => new
                 {
-                    PersonID = table.Column<int>(nullable: false)
+                    PersonId = table.Column<int>(nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     FullName = table.Column<string>(nullable: true),
                     Department = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Persons", x => x.PersonID);
+                    table.PrimaryKey("PK_Persons", x => x.PersonId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Concepts",
                 columns: table => new
                 {
-                    ConceptID = table.Column<int>(nullable: false)
+                    ConceptId = table.Column<int>(nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     Description = table.Column<string>(nullable: true),
                     ConceptTypeID = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Concepts", x => x.ConceptID);
+                    table.PrimaryKey("PK_Concepts", x => x.ConceptId);
                     table.ForeignKey(
                         name: "FK_Concepts_ConceptTypes_ConceptTypeID",
                         column: x => x.ConceptTypeID,
@@ -62,16 +62,16 @@ namespace ExpensasAbbinatura.Migrations
                     InstallmentID = table.Column<int>(nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     When = table.Column<DateTime>(nullable: false),
-                    PersonID = table.Column<int>(nullable: true)
+                    PersonId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Installments", x => x.InstallmentID);
                     table.ForeignKey(
-                        name: "FK_Installments_Persons_PersonID",
-                        column: x => x.PersonID,
+                        name: "FK_Installments_Persons_PersonId",
+                        column: x => x.PersonId,
                         principalTable: "Persons",
-                        principalColumn: "PersonID",
+                        principalColumn: "PersonId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -79,21 +79,21 @@ namespace ExpensasAbbinatura.Migrations
                 name: "InstallmentConcepts",
                 columns: table => new
                 {
-                    InstallmentConceptID = table.Column<int>(nullable: false)
+                    InstallmentConceptId = table.Column<int>(nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    ConceptID = table.Column<int>(nullable: true),
+                    ConceptId = table.Column<int>(nullable: true),
                     Amount = table.Column<decimal>(nullable: false),
                     Comments = table.Column<string>(nullable: true),
                     InstallmentID = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_InstallmentConcepts", x => x.InstallmentConceptID);
+                    table.PrimaryKey("PK_InstallmentConcepts", x => x.InstallmentConceptId);
                     table.ForeignKey(
-                        name: "FK_InstallmentConcepts_Concepts_ConceptID",
-                        column: x => x.ConceptID,
+                        name: "FK_InstallmentConcepts_Concepts_ConceptId",
+                        column: x => x.ConceptId,
                         principalTable: "Concepts",
-                        principalColumn: "ConceptID",
+                        principalColumn: "ConceptId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_InstallmentConcepts_Installments_InstallmentID",
@@ -109,9 +109,9 @@ namespace ExpensasAbbinatura.Migrations
                 column: "ConceptTypeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_InstallmentConcepts_ConceptID",
+                name: "IX_InstallmentConcepts_ConceptId",
                 table: "InstallmentConcepts",
-                column: "ConceptID");
+                column: "ConceptId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_InstallmentConcepts_InstallmentID",
@@ -119,9 +119,9 @@ namespace ExpensasAbbinatura.Migrations
                 column: "InstallmentID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Installments_PersonID",
+                name: "IX_Installments_PersonId",
                 table: "Installments",
-                column: "PersonID");
+                column: "PersonId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

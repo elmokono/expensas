@@ -21,7 +21,7 @@ namespace ExpensasAbbinatura.Migrations
 
             modelBuilder.Entity("ExpensasAbbinatura.Models.Concept", b =>
                 {
-                    b.Property<int>("ConceptID")
+                    b.Property<int>("ConceptId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -31,7 +31,7 @@ namespace ExpensasAbbinatura.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.HasKey("ConceptID");
+                    b.HasKey("ConceptId");
 
                     b.HasIndex("ConceptTypeID");
 
@@ -58,7 +58,7 @@ namespace ExpensasAbbinatura.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("PersonID")
+                    b.Property<int?>("PersonId")
                         .HasColumnType("int");
 
                     b.Property<string>("StatusInstallmentStatusID")
@@ -69,7 +69,7 @@ namespace ExpensasAbbinatura.Migrations
 
                     b.HasKey("InstallmentID");
 
-                    b.HasIndex("PersonID");
+                    b.HasIndex("PersonId");
 
                     b.HasIndex("StatusInstallmentStatusID");
 
@@ -78,7 +78,7 @@ namespace ExpensasAbbinatura.Migrations
 
             modelBuilder.Entity("ExpensasAbbinatura.Models.InstallmentConcept", b =>
                 {
-                    b.Property<int>("InstallmentConceptID")
+                    b.Property<int>("InstallmentConceptId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -88,15 +88,15 @@ namespace ExpensasAbbinatura.Migrations
                     b.Property<string>("Comments")
                         .HasColumnType("text");
 
-                    b.Property<int?>("ConceptID")
+                    b.Property<int?>("ConceptId")
                         .HasColumnType("int");
 
                     b.Property<int?>("InstallmentID")
                         .HasColumnType("int");
 
-                    b.HasKey("InstallmentConceptID");
+                    b.HasKey("InstallmentConceptId");
 
-                    b.HasIndex("ConceptID");
+                    b.HasIndex("ConceptId");
 
                     b.HasIndex("InstallmentID");
 
@@ -118,7 +118,7 @@ namespace ExpensasAbbinatura.Migrations
 
             modelBuilder.Entity("ExpensasAbbinatura.Models.Person", b =>
                 {
-                    b.Property<int>("PersonID")
+                    b.Property<int>("PersonId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -134,7 +134,7 @@ namespace ExpensasAbbinatura.Migrations
                     b.Property<string>("Password")
                         .HasColumnType("text");
 
-                    b.HasKey("PersonID");
+                    b.HasKey("PersonId");
 
                     b.ToTable("Persons");
                 });
@@ -150,7 +150,7 @@ namespace ExpensasAbbinatura.Migrations
                 {
                     b.HasOne("ExpensasAbbinatura.Models.Person", "Person")
                         .WithMany("Installments")
-                        .HasForeignKey("PersonID");
+                        .HasForeignKey("PersonId");
 
                     b.HasOne("ExpensasAbbinatura.Models.InstallmentStatus", "Status")
                         .WithMany()
@@ -161,7 +161,7 @@ namespace ExpensasAbbinatura.Migrations
                 {
                     b.HasOne("ExpensasAbbinatura.Models.Concept", "Concept")
                         .WithMany()
-                        .HasForeignKey("ConceptID");
+                        .HasForeignKey("ConceptId");
 
                     b.HasOne("ExpensasAbbinatura.Models.Installment", null)
                         .WithMany("InstallmentConcepts")

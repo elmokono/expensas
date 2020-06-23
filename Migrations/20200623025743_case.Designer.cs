@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ExpensasAbbinatura.Migrations
 {
     [DbContext(typeof(ExpensasContext))]
-    [Migration("20200612211758_mail-pwd")]
-    partial class mailpwd
+    [Migration("20200623025743_case")]
+    partial class @case
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -19,13 +19,30 @@ namespace ExpensasAbbinatura.Migrations
                 .HasAnnotation("ProductVersion", "3.1.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("ExpensasAbbinatura.Models.Building", b =>
+                {
+                    b.Property<int>("BuildingId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("StreetAddress")
+                        .HasColumnType("text");
+
+                    b.HasKey("BuildingId");
+
+                    b.ToTable("Buildings");
+                });
+
             modelBuilder.Entity("ExpensasAbbinatura.Models.Concept", b =>
                 {
                     b.Property<int>("ConceptId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("ConceptTypeID")
+                    b.Property<int?>("ConceptTypeId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -33,40 +50,45 @@ namespace ExpensasAbbinatura.Migrations
 
                     b.HasKey("ConceptId");
 
-                    b.HasIndex("ConceptTypeID");
+                    b.HasIndex("ConceptTypeId");
 
                     b.ToTable("Concepts");
                 });
 
             modelBuilder.Entity("ExpensasAbbinatura.Models.ConceptType", b =>
                 {
-                    b.Property<int>("ConceptTypeID")
+                    b.Property<int>("ConceptTypeId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.HasKey("ConceptTypeID");
+                    b.HasKey("ConceptTypeId");
 
                     b.ToTable("ConceptTypes");
                 });
 
             modelBuilder.Entity("ExpensasAbbinatura.Models.Installment", b =>
                 {
-                    b.Property<int>("InstallmentID")
+                    b.Property<int>("InstallmentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<int?>("PersonId")
                         .HasColumnType("int");
 
+                    b.Property<string>("StatusInstallmentStatusId")
+                        .HasColumnType("varchar(767)");
+
                     b.Property<DateTime>("When")
                         .HasColumnType("datetime");
 
-                    b.HasKey("InstallmentID");
+                    b.HasKey("InstallmentId");
 
                     b.HasIndex("PersonId");
+
+                    b.HasIndex("StatusInstallmentStatusId");
 
                     b.ToTable("Installments");
                 });
@@ -86,22 +108,38 @@ namespace ExpensasAbbinatura.Migrations
                     b.Property<int?>("ConceptId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("InstallmentID")
+                    b.Property<int?>("InstallmentId")
                         .HasColumnType("int");
 
                     b.HasKey("InstallmentConceptId");
 
                     b.HasIndex("ConceptId");
 
-                    b.HasIndex("InstallmentID");
+                    b.HasIndex("InstallmentId");
 
                     b.ToTable("InstallmentConcepts");
+                });
+
+            modelBuilder.Entity("ExpensasAbbinatura.Models.InstallmentStatus", b =>
+                {
+                    b.Property<string>("InstallmentStatusId")
+                        .HasColumnType("varchar(767)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.HasKey("InstallmentStatusId");
+
+                    b.ToTable("InstallmentStatus");
                 });
 
             modelBuilder.Entity("ExpensasAbbinatura.Models.Person", b =>
                 {
                     b.Property<int>("PersonId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("BuildingId")
                         .HasColumnType("int");
 
                     b.Property<string>("Department")
@@ -116,7 +154,12 @@ namespace ExpensasAbbinatura.Migrations
                     b.Property<string>("Password")
                         .HasColumnType("text");
 
+                    b.Property<string>("RoleCode")
+                        .HasColumnType("text");
+
                     b.HasKey("PersonId");
+
+                    b.HasIndex("BuildingId");
 
                     b.ToTable("Persons");
                 });
@@ -125,14 +168,18 @@ namespace ExpensasAbbinatura.Migrations
                 {
                     b.HasOne("ExpensasAbbinatura.Models.ConceptType", "ConceptType")
                         .WithMany()
-                        .HasForeignKey("ConceptTypeID");
+                        .HasForeignKey("ConceptTypeId");
                 });
 
             modelBuilder.Entity("ExpensasAbbinatura.Models.Installment", b =>
                 {
-                    b.HasOne("ExpensasAbbinatura.Models.Person", null)
+                    b.HasOne("ExpensasAbbinatura.Models.Person", "Person")
                         .WithMany("Installments")
                         .HasForeignKey("PersonId");
+
+                    b.HasOne("ExpensasAbbinatura.Models.InstallmentStatus", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusInstallmentStatusId");
                 });
 
             modelBuilder.Entity("ExpensasAbbinatura.Models.InstallmentConcept", b =>
@@ -143,7 +190,14 @@ namespace ExpensasAbbinatura.Migrations
 
                     b.HasOne("ExpensasAbbinatura.Models.Installment", null)
                         .WithMany("InstallmentConcepts")
-                        .HasForeignKey("InstallmentID");
+                        .HasForeignKey("InstallmentId");
+                });
+
+            modelBuilder.Entity("ExpensasAbbinatura.Models.Person", b =>
+                {
+                    b.HasOne("ExpensasAbbinatura.Models.Building", "Building")
+                        .WithMany()
+                        .HasForeignKey("BuildingId");
                 });
 #pragma warning restore 612, 618
         }

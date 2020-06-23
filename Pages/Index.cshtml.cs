@@ -23,16 +23,17 @@ namespace ExpensasAbbinatura.Pages
 
         public IEnumerable<Installment> Installments { get; set; }
 
-        IEnumerable<Installment> GetInstallments(int personID)
+        IEnumerable<Installment> GetInstallments(string email)
         {
             var person = _context.Persons
+                .AsNoTracking()
                 .Include(x => x.Installments)
                     .ThenInclude(x => x.InstallmentConcepts)
                     .ThenInclude(x => x.Concept)
                     .ThenInclude(x => x.ConceptType)
                 .Include(x => x.Installments)
                     .ThenInclude(x => x.Status)
-                .SingleOrDefault(x => x.PersonID == personID);
+                .SingleOrDefault(x => x.Email == email);
 
             if (person == null) { return new List<Installment>(); }
 
@@ -42,7 +43,7 @@ namespace ExpensasAbbinatura.Pages
 
         public void OnGet()
         {
-            Installments = GetInstallments(1);
+            Installments = GetInstallments(User.FindFirst(System.Security.Claims.ClaimTypes.Email).Value);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace ExpensasAbbinatura.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<int>(
-                name: "BuildingID",
+                name: "BuildingId",
                 table: "Persons",
                 nullable: true);
 
@@ -16,45 +16,45 @@ namespace ExpensasAbbinatura.Migrations
                 name: "Buildings",
                 columns: table => new
                 {
-                    BuildingID = table.Column<int>(nullable: false)
+                    BuildingId = table.Column<int>(nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true),
                     StreetAddress = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Buildings", x => x.BuildingID);
+                    table.PrimaryKey("PK_Buildings", x => x.BuildingId);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Persons_BuildingID",
+                name: "IX_Persons_BuildingId",
                 table: "Persons",
-                column: "BuildingID");
+                column: "BuildingId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Persons_Buildings_BuildingID",
+                name: "FK_Persons_Buildings_BuildingId",
                 table: "Persons",
-                column: "BuildingID",
+                column: "BuildingId",
                 principalTable: "Buildings",
-                principalColumn: "BuildingID",
+                principalColumn: "BuildingId",
                 onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Persons_Buildings_BuildingID",
+                name: "FK_Persons_Buildings_BuildingId",
                 table: "Persons");
 
             migrationBuilder.DropTable(
                 name: "Buildings");
 
             migrationBuilder.DropIndex(
-                name: "IX_Persons_BuildingID",
+                name: "IX_Persons_BuildingId",
                 table: "Persons");
 
             migrationBuilder.DropColumn(
-                name: "BuildingID",
+                name: "BuildingId",
                 table: "Persons");
         }
     }

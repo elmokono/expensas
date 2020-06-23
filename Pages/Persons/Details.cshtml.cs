@@ -27,7 +27,7 @@ namespace ExpensasAbbinatura.Pages.Persons
                 return NotFound();
             }
 
-            Person = await _context.Persons.FirstOrDefaultAsync(m => m.PersonID == id);
+            Person = await _context.Persons.FirstOrDefaultAsync(m => m.PersonId == id);
 
             if (Person == null)
             {

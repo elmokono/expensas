@@ -50,7 +50,7 @@ namespace ExpensasAbbinatura.Security
         {
             List<Claim> claims = new List<Claim>();
 
-            claims.Add(new Claim(ClaimTypes.NameIdentifier, user.PersonID.ToString()));
+            claims.Add(new Claim(ClaimTypes.NameIdentifier, user.PersonId.ToString()));
             claims.Add(new Claim(ClaimTypes.Name, user.FullName));
             claims.Add(new Claim(ClaimTypes.Email, user.Email));
             claims.Add(new Claim(ClaimTypes.StreetAddress, user.Department));
@@ -63,8 +63,8 @@ namespace ExpensasAbbinatura.Security
         {
             List<Claim> claims = new List<Claim>();
 
-            claims.Add(new Claim(ClaimTypes.NameIdentifier, user.PersonID.ToString()));
-            claims.Add(new Claim(ClaimTypes.Role, "CUSTOMER"));
+            claims.Add(new Claim(ClaimTypes.NameIdentifier, user.PersonId.ToString()));
+            claims.Add(new Claim(ClaimTypes.Role, user.RoleCode));
             return claims;
         }
     }
