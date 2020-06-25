@@ -32,6 +32,7 @@
     </li>
 </ul>
 <div class="tab-content" id="myTabContent">
+
     <div class="tab-pane fade  @(Model.ClassicView ? "show active" : "")" id="classic-view" role="tabpanel" aria-labelledby="classic-view-tab">
 
         <table id="table-installments" class="table" width="100%">
@@ -43,7 +44,7 @@
                 {
                     <tr>
                         <td><a class="badge @(item.Status.InstallmentStatusId == "PENDING" ? "badge-danger" : "badge-success")">@(item.Status.InstallmentStatusId == "PENDING" ? "Sin Pagar" : "Pagada")</a></td>
-                        <td>@item.When.ToString("dd/MM/yyyy")</td>
+                        <td>@item.When.ToString("dd/MMM/yyyy")</td>
                         <td>
                             <div class="row">
                                 <table id="table-installment-concepts" class="table table-sm table-bordered" width="100%">
@@ -77,42 +78,60 @@
         </table>
 
     </div>
+
     <div class="tab-pane fade  @(Model.ClassicView ? "" : "show active")" id="compact-view" role="tabpanel" aria-labelledby="compact-view-tab">
-        <table class="table" width="100%">
+        <table class="table table-sm table-bordered" width="100%">
             <thead>
                 <tr>
-                    <th>Concepto</th>
+                    <th align="center">Concepto</th>
                     @foreach (var inst in Model.Installments)
                     {
-                        <th>@inst.When.ToString("dd/MM/yyyy")</th>
+                        <th style="text-align: center">@inst.When.ToString("dd/MMM/yyyy")</th>
                     }
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.Installments.SelectMany(x => x.InstallmentConcepts.Select(y => y.Concept)).Distinct().OrderBy(x => x.ConceptType.Description).ThenBy(x => x.Description))
+                @{ 
+                    var concepts = Model.Installments
+                        .SelectMany(x => x.InstallmentConcepts.Select(y => y.Concept))
+                        .GroupBy(x => x.ConceptId)
+                        .Select(x => x.First())
+                        .OrderBy(x => x.ConceptType.Description)
+                        .ThenBy(x => x.Description);
+                }
+                @foreach (var item in concepts)
                 {
                     <tr>
                         <td>@item.Description</td>
                         @foreach (var inst in Model.Installments)
                         {
-                            <td>$@(inst.InstallmentConcepts.FirstOrDefault(x => x.Concept.ConceptId == item.ConceptId)?.Amount ?? 0)</td>
-                        }
+                            var cellValue = inst.InstallmentConcepts.FirstOrDefault(x => x.Concept.ConceptId == item.ConceptId)?.Amount ?? 0;
 
+                            <td align="right">@(cellValue == 0 ? "-" : cellValue.ToString("$#0.00"))</td>                        
+                        }
                     </tr>
                 }
             </tbody>
             <tfoot>
                 <tr>
-                    <td>Total</td>
+                    <td><b>Total</b></td>
                     @foreach (var inst in Model.Installments)
                     {
-                        <td><b>$@inst.InstallmentConcepts.Sum(x => x.Amount)</b></td>
+                        <td align="right"><b>$@inst.InstallmentConcepts.Sum(x => x.Amount)</b></td>
+                    }
+                </tr>
+                <tr>
+                    <td>Estado</td>
+                    @foreach (var inst in Model.Installments)
+                    {
+                        <td align="right"><a class="badge @(inst.Status.InstallmentStatusId == "PENDING" ? "badge-danger" : "badge-success")">@(inst.Status.InstallmentStatusId == "PENDING" ? "Sin Pagar" : "Pagada")</a></td>
                     }
                 </tr>
             </tfoot>
         </table>
 
     </div>
+
 </div>
 
 

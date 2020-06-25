@@ -4,7 +4,7 @@
     ViewData["Title"] = "Administracion de Inquilinos";
 }
 
-<h1>Administracion de Personas</h1>
+<h1>Administracion de Departamentos</h1>
 <form name="form1" method="post">
     <p>
         <div class="dropdown">
@@ -27,16 +27,25 @@
         <table class="table">
             <thead>
                 <tr>
+                    <th>Departamento</th>
                     <th>Persona</th>
+                    <th>EMail</th>
                     <th>Deuda</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.Persons)
+                @foreach (var item in Model.Persons.OrderBy(x => x.Department))
                 {
                 <tr>
+                    <td>@item.Department</td>
                     <td>@item.FullName</td>
+                    <td>@item.Email</td>
                     <td align="right">$@item.TotalDebt</td>
+                    <td>
+                        <button class="btn btn-sm btn-success" onclick="javascript:location='/Installments?buildingId=@(item.Building.BuildingId)&department=@(item.Department)';">Expensas</button>
+                        <button class="btn btn-sm btn-info" onclick="">Editar</button>
+                    </td>
                 </tr>
                 }
             </tbody>
