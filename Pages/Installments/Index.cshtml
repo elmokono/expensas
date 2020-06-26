@@ -21,120 +21,136 @@
         </div>
         @Html.HiddenFor(x => x.SelectedYear)
     </p>
-</form>
 
-<ul class="nav nav-tabs" id="myTab" role="tablist">
-    <li class="nav-item">
-        <a class="nav-link @(Model.ClassicView ? "active" : "")" id="classic-view-tab" data-view="classic" data-toggle="tab" href="#classic-view" role="tab" aria-controls="classic-view" aria-selected="@Model.ClassicView.ToString().ToLower()">Vista Clasica</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link @(Model.ClassicView ? "" : "active")" id="compact-view-tab" data-view="compact" data-toggle="tab" href="#compact-view" role="tab" aria-controls="compact-view" aria-selected="@((!Model.ClassicView).ToString().ToLower())">Vista Simplificada</a>
-    </li>
-</ul>
-<div class="tab-content" id="myTabContent">
 
-    <div class="tab-pane fade  @(Model.ClassicView ? "show active" : "")" id="classic-view" role="tabpanel" aria-labelledby="classic-view-tab">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link @(Model.ClassicView ? "active" : "")" id="classic-view-tab" data-view="classic" data-toggle="tab" href="#classic-view" role="tab" aria-controls="classic-view" aria-selected="@Model.ClassicView.ToString().ToLower()">Vista Clasica</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @(Model.ClassicView ? "" : "active")" id="compact-view-tab" data-view="compact" data-toggle="tab" href="#compact-view" role="tab" aria-controls="compact-view" aria-selected="@((!Model.ClassicView).ToString().ToLower())">Vista Simplificada</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
 
-        <table id="table-installments" class="table" width="100%">
-            <thead>
-                <tr><th>Estado</th><th>Periodo</th><th>Detalle</th></tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.Installments)
-                {
-                    <tr>
-                        <td><a class="badge @(item.Status.InstallmentStatusId == "PENDING" ? "badge-danger" : "badge-success")">@(item.Status.InstallmentStatusId == "PENDING" ? "Sin Pagar" : "Pagada")</a></td>
-                        <td>@item.When.ToString("dd/MMM/yyyy")</td>
-                        <td>
-                            <div class="row">
-                                <table id="table-installment-concepts" class="table table-sm table-bordered" width="100%">
-                                    <tbody>
-                                        @foreach (var concept in item.InstallmentConcepts)
-                                        {
-                                            <tr>
-                                                <td>@concept.Concept.Description</td>
-                                                <td>@concept.Concept.ConceptType.Description</td>
-                                                <td align="right">$@concept.Amount</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td colspan="3" align="right"><b>$@item.Total</b></td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="2">Total Deuda</td>
-                    <td align="right">$@Model.Installments.Where(x => x.Status.InstallmentStatusId == "PENDING").Sum(x => x.Total)</td>
-                </tr>
-            </tfoot>
-        </table>
+        <div class="tab-pane fade  @(Model.ClassicView ? "show active" : "")" id="classic-view" role="tabpanel" aria-labelledby="classic-view-tab">
 
-    </div>
-
-    <div class="tab-pane fade  @(Model.ClassicView ? "" : "show active")" id="compact-view" role="tabpanel" aria-labelledby="compact-view-tab">
-        <table class="table table-sm table-bordered" width="100%">
-            <thead>
-                <tr>
-                    <th align="center">Concepto</th>
-                    @foreach (var inst in Model.Installments)
+            <table id="table-installments" class="table" width="100%">
+                <thead>
+                    <tr><th>Estado</th><th>Periodo</th><th>Detalle</th></tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Installments)
                     {
-                        <th style="text-align: center">@inst.When.ToString("dd/MMM/yyyy")</th>
+                        <tr>
+                            <td><a class="badge @(item.IsPending ? "badge-danger" : "badge-success")">@(item.IsPending ? "Sin Pagar" : "Pagada")</a></td>
+                            <td>@item.When.ToString("dd/MMM/yyyy")</td>
+                            <td>
+                                <div class="row">
+                                    <table id="table-installment-concepts" class="table table-sm table-bordered" width="100%">
+                                        <tbody>
+                                            @foreach (var concept in item.InstallmentConcepts)
+                                            {
+                                                <tr>
+                                                    <td>@concept.Concept.Description</td>
+                                                    <td>@concept.Concept.ConceptType.Description</td>
+                                                    <td align="right">$@concept.Amount</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="3" align="right"><b>$@item.Total</b></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
                     }
-                </tr>
-            </thead>
-            <tbody>
-                @{ 
-                    var concepts = Model.Installments
-                        .SelectMany(x => x.InstallmentConcepts.Select(y => y.Concept))
-                        .GroupBy(x => x.ConceptId)
-                        .Select(x => x.First())
-                        .OrderBy(x => x.ConceptType.Description)
-                        .ThenBy(x => x.Description);
-                }
-                @foreach (var item in concepts)
-                {
+                </tbody>
+                <tfoot>
                     <tr>
-                        <td>@item.Description</td>
+                        <td colspan="2">Total Deuda</td>
+                        <td align="right">$@Model.Installments.Where(x => x.IsPending).Sum(x => x.Total)</td>
+                    </tr>
+                </tfoot>
+            </table>
+
+        </div>
+
+        <div class="tab-pane fade  @(Model.ClassicView ? "" : "show active")" id="compact-view" role="tabpanel" aria-labelledby="compact-view-tab">
+            <table class="table table-sm table-bordered" width="100%">
+                <thead>
+                    <tr>
+                        <th align="center">Concepto</th>
                         @foreach (var inst in Model.Installments)
                         {
-                            var cellValue = inst.InstallmentConcepts.FirstOrDefault(x => x.Concept.ConceptId == item.ConceptId)?.Amount ?? 0;
-
-                            <td align="right">@(cellValue == 0 ? "-" : cellValue.ToString("$#0.00"))</td>                        
+                            <th style="text-align: center">@inst.When.ToString("dd/MMM/yyyy")</th>
                         }
                     </tr>
-                }
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td><b>Total</b></td>
-                    @foreach (var inst in Model.Installments)
-                    {
-                        <td align="right"><b>$@inst.InstallmentConcepts.Sum(x => x.Amount)</b></td>
+                </thead>
+                <tbody>
+                    @{
+                        var concepts = Model.Installments
+                            .SelectMany(x => x.InstallmentConcepts.Select(y => y.Concept))
+                            .GroupBy(x => x.ConceptId)
+                            .Select(x => x.First())
+                            .OrderBy(x => x.ConceptType.Description)
+                            .ThenBy(x => x.Description);
                     }
-                </tr>
-                <tr>
-                    <td>Estado</td>
-                    @foreach (var inst in Model.Installments)
+                    @foreach (var item in concepts)
                     {
-                        <td align="right"><a class="badge @(inst.Status.InstallmentStatusId == "PENDING" ? "badge-danger" : "badge-success")">@(inst.Status.InstallmentStatusId == "PENDING" ? "Sin Pagar" : "Pagada")</a></td>
+                        <tr>
+                            <td>@item.Description</td>
+                            @foreach (var inst in Model.Installments)
+                            {
+                                var cellValue = inst.InstallmentConcepts.FirstOrDefault(x => x.Concept.ConceptId == item.ConceptId)?.Amount ?? 0;
+
+                                <td align="right">@(cellValue == 0 ? "-" : cellValue.ToString("$#0.00"))</td>
+
+                            }
+                        </tr>
                     }
-                </tr>
-            </tfoot>
-        </table>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td><b>Total</b></td>
+                        @foreach (var inst in Model.Installments)
+                        {
+                            <td align="right"><b>$@inst.InstallmentConcepts.Sum(x => x.Amount)</b></td>
+                        }
+                    </tr>
+                    <tr>
+                        <td></td>
+                        @foreach (var inst in Model.Installments)
+                        {
+                            <td align="center">
+                                <div class="dropdown">
+                                    <button class="btn @(inst.IsPending ? "btn-danger" : "btn-success") dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        @(inst.IsPending ? "Con Deuda" : "Sin Deuda")
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <button class="dropdown-item" type="submit" asp-page-handler="paid" asp-route-id="@inst.InstallmentId">
+                                            Marcar sin Deuda
+                                        </button>
+                                        <button class="dropdown-item" type="submit" asp-page-handler="pending" asp-route-id="@inst.InstallmentId">
+                                            Marcar con Deuda
+                                        </button>
+                                    </div>
+                                </div>
+                            </td>
+                        }
+                    </tr>
+                </tfoot>
+            </table>
+            @*@Html.HiddenFor(x => x.InstallmentId)
+                @Html.HiddenFor(x => x.InstallmentStatusId)*@
+        </div>
 
     </div>
 
-</div>
-
-
+</form>
 @section scripts
 {
     <script>
@@ -145,6 +161,12 @@
                 $('#SelectedYear').val($(this).data('value'));
                 $('form')[0].submit();
             });
+
+            //$('.dropdown-item.status').click(function () {
+            //    $('#InstallmentId').val($(this).data('id'));
+            //    $('#InstallmentStatusId').val($(this).data('value'));
+            //    $('form').attr("action","Status")[0].submit();
+            //});
 
             $('#home-tab')
 

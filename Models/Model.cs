@@ -24,7 +24,8 @@ namespace ExpensasAbbinatura.Models
         public DbSet<Concept> Concepts { get; set; }
         public DbSet<ConceptType> ConceptTypes { get; set; }
         public DbSet<Building> Buildings { get; set; }
-        
+        public DbSet<InstallmentStatus> InstallmentStatus { get; set; }
+
         public ExpensasContext(DbContextOptions<ExpensasContext> options) : base(options) { }
     }
 
@@ -51,7 +52,7 @@ namespace ExpensasAbbinatura.Models
         {
             get
             {
-                return Installments.Where(x => x.Status.InstallmentStatusId == "PENDING").Sum(x => x.Total);
+                return Installments.Where(x => x.IsPending).Sum(x => x.Total);
             }
         }
     }
@@ -59,7 +60,7 @@ namespace ExpensasAbbinatura.Models
     public class InstallmentStatus
     {
         public string InstallmentStatusId { get; set; }
-        public string Description { get; set; }
+        public string Description { get; set; }        
     }
 
     public class Installment
@@ -68,6 +69,8 @@ namespace ExpensasAbbinatura.Models
         public Person Person { get; set; }
         public DateTime When { get; set; }
         public InstallmentStatus Status { get; set; }
+        [ScaffoldColumn(false)]
+        public bool IsPending => (Status?.InstallmentStatusId ?? "") == "PENDING";
         public List<InstallmentConcept> InstallmentConcepts { get; } = new List<InstallmentConcept>();
 
         [ScaffoldColumn(false)]

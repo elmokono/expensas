@@ -32,7 +32,7 @@
                 @foreach (var item in Model.Installments)
                 {
                     <tr>
-                        <td><a class="badge @(item.Status.InstallmentStatusId == "PENDING" ? "badge-danger" : "badge-success")">@(item.Status.InstallmentStatusId == "PENDING" ? "Sin Pagar" : "Pagada")</a></td>
+                        <td><a class="badge @(item.IsPending ? "badge-danger" : "badge-success")">@(item.IsPending ? "Sin Pagar" : "Pagada")</a></td>
                         <td><a href="#" class="installment-detail" data-json='@item.InstallmentConceptsJSON' data-id="@item.InstallmentId">@item.When.ToString("dd/MM/yyyy")</a></td>
                         <td align="right">$@item.Total</td>
                     </tr>
@@ -41,14 +41,14 @@
             <tfoot>
                 <tr>
                     <td colspan="2">Total Deuda</td>
-                    <td align="right">$@Model.Installments.Where(x => x.Status.InstallmentStatusId == "PENDING").Sum(x => x.Total)</td>
+                    <td align="right">$@Model.Installments.Where(x => x.IsPending).Sum(x => x.Total)</td>
                 </tr>
             </tfoot>
         </table>
     </div>
     <div class="col-md-6">
         <div class="alert alert-warning">
-            <i class="fas fa-video"></i> Puerta Calle</b>
+            <i class="fas fa-video"></i> Puerta Calle
         </div>
         <img style="width: 100%" src="http://abbinatura.ddns.net:8888/videostream.cgi?user=admin&pwd=mokono22&resolution=32&rate=15" />
     </div>

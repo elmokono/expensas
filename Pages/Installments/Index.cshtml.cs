@@ -35,6 +35,12 @@ namespace ExpensasAbbinatura.Pages.Installments
         [BindProperty]
         public int SelectedYear { get; set; }
 
+        //[BindProperty]
+        //public int InstallmentId { get; set; }
+
+        //[BindProperty]
+        //public string InstallmentStatusId { get; set; }
+
         [BindProperty]
         public bool ClassicView { get; set; }
 
@@ -43,11 +49,30 @@ namespace ExpensasAbbinatura.Pages.Installments
             Installments = await GetInstallments().ToListAsync();
         }
 
+        public async Task OnPostPaidAsync(int id)
+        {
+            ChangeStatus(id, "PAID");
+            Installments = await GetInstallments().ToListAsync();
+        }
+
+        public async Task OnPostPendingAsync(int id)
+        {
+            ChangeStatus(id, "PENDING");
+            Installments = await GetInstallments().ToListAsync();
+        }
+
         public async Task OnGetAsync()
         {
             SelectedYear = Years.First();
             ClassicView = false;
             Installments = await GetInstallments().ToListAsync();
+        }
+
+        void ChangeStatus(int installmentId, string installmentStatusId)
+        {
+            var installment = _context.Installments.Find(installmentId);
+            installment.Status = _context.InstallmentStatus.Find(installmentStatusId);
+            _context.SaveChangesAsync();
         }
 
         IOrderedQueryable<Installment> GetInstallments()
