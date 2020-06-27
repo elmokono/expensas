@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using ExpensasAbbinatura.Models;
 
-namespace ExpensasAbbinatura.Pages.Persons
+namespace ExpensasAbbinatura.Pages.LivingUnits
 {
     public class IndexModel : PageModel
     {
@@ -18,11 +18,18 @@ namespace ExpensasAbbinatura.Pages.Persons
             _context = context;
         }
 
-        public IList<Person> Person { get;set; }
+        public LivingUnit LivingUnit { get;set; }
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync(int id)
         {
-            Person = await _context.Persons.ToListAsync();
+            LivingUnit = await _context.LivingUnits
+                .Include(x => x.Building)
+                .Include(x => x.Persons)
+                .FirstAsync(x => x.LivingUnitId == id);
+
+            if (LivingUnit == null) { return new NotFoundResult(); }
+
+            return Page();
         }
     }
 }

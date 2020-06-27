@@ -25,6 +25,7 @@ namespace ExpensasAbbinatura.Models
         public DbSet<ConceptType> ConceptTypes { get; set; }
         public DbSet<Building> Buildings { get; set; }
         public DbSet<InstallmentStatus> InstallmentStatus { get; set; }
+        public DbSet<LivingUnit> LivingUnits { get; set; }
 
         public ExpensasContext(DbContextOptions<ExpensasContext> options) : base(options) { }
     }
@@ -36,17 +37,13 @@ namespace ExpensasAbbinatura.Models
         public string StreetAddress { get; set; }
     }
 
-    public class Person
+    public class LivingUnit
     {
-        public int PersonId { get; set; }
-        public string FullName { get; set; }
-        public string Department { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
+        public int LivingUnitId { get; set; }
+        public string Code { get; set; }
         public Building Building { get; set; }
-        public string RoleCode { get; set; }
+        public List<Person> Persons { get; } = new List<Person>();
         public List<Installment> Installments { get; } = new List<Installment>();
-
         [ScaffoldColumn(false)]
         public decimal TotalDebt
         {
@@ -55,6 +52,16 @@ namespace ExpensasAbbinatura.Models
                 return Installments.Where(x => x.IsPending).Sum(x => x.Total);
             }
         }
+    }
+
+    public class Person
+    {
+        public int PersonId { get; set; }
+        public string FullName { get; set; }
+        public string Department { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
+        public string RoleCode { get; set; }
     }
 
     public class InstallmentStatus
@@ -66,7 +73,7 @@ namespace ExpensasAbbinatura.Models
     public class Installment
     {
         public int InstallmentId { get; set; }
-        public Person Person { get; set; }
+        public LivingUnit LivingUnit { get; set; }
         public DateTime When { get; set; }
         public InstallmentStatus Status { get; set; }
         [ScaffoldColumn(false)]

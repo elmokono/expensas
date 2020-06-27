@@ -1,10 +1,10 @@
 ﻿@page
 @model ExpensasAbbinatura.Pages.Admin.IndexModel
 @{
-    ViewData["Title"] = "Administracion de Inquilinos";
+    ViewData["Title"] = "Administracion de Viviendas";
 }
 
-<h1>Administracion de Departamentos</h1>
+<h1>Administracion de Viviendas</h1>
 <form name="form1" method="post">
     <p>
         <div class="dropdown">
@@ -35,18 +35,18 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.Persons.OrderBy(x => x.Department))
+                @foreach (var item in Model.LivingUnits.OrderBy(x => x.Code))
                 {
-                <tr>
-                    <td>@item.Department</td>
-                    <td>@item.FullName</td>
-                    <td>@item.Email</td>
-                    <td align="right">$@item.TotalDebt</td>
-                    <td>
-                        <button class="btn btn-sm btn-success" onclick="javascript:location='/Installments?buildingId=@(item.Building.BuildingId)&department=@(item.Department)';">Expensas</button>
-                        <button class="btn btn-sm btn-info" onclick="">Editar</button>
-                    </td>
-                </tr>
+                    <tr>
+                        <td>@item.Code</td>
+                        <td>@item.Persons.First().FullName</td>
+                        <td>@item.Persons.First().Email</td>
+                        <td align="right">$@item.TotalDebt</td>
+                        <td>
+                            <button class="btn btn-sm btn-success" onclick="javascript:location='/Installments?buildingId=@(item.Building.BuildingId)&department=@(item.Code)';">Expensas</button>
+                            <button class="btn btn-sm btn-info" onclick="javascript:location='/LivingUnits?id=@(item.LivingUnitId)';">Editar</button>
+                        </td>
+                    </tr>
                 }
             </tbody>
             <tfoot></tfoot>

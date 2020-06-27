@@ -23,7 +23,7 @@ namespace ExpensasAbbinatura.Pages.Admin
         public int SelectedBuildingId { get; set; }
 
         public IEnumerable<ExpensasAbbinatura.Models.Building> Buildings { get; set; }
-        public IEnumerable<ExpensasAbbinatura.Models.Person> Persons { get; set; }
+        public IEnumerable<ExpensasAbbinatura.Models.LivingUnit> LivingUnits { get; set; }
 
         public async Task OnGetAsync()
         {
@@ -39,7 +39,8 @@ namespace ExpensasAbbinatura.Pages.Admin
         async Task Bind()
         {
             Buildings = await _context.Buildings.ToListAsync();
-            Persons = await _context.Persons
+            LivingUnits = await _context.LivingUnits
+                .Include(x => x.Persons)
                 .Include(x => x.Installments)
                 .ThenInclude(x => x.InstallmentConcepts)
                 .Include(x => x.Installments)

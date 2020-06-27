@@ -25,19 +25,20 @@ namespace ExpensasAbbinatura.Pages
 
         IEnumerable<Installment> GetInstallments(string email)
         {
-            var person = _context.Persons
+            var livingUnit = _context.LivingUnits
                 .AsNoTracking()
+                .Include(x => x.Persons)
                 .Include(x => x.Installments)
                     .ThenInclude(x => x.InstallmentConcepts)
                     .ThenInclude(x => x.Concept)
                     .ThenInclude(x => x.ConceptType)
                 .Include(x => x.Installments)
                     .ThenInclude(x => x.Status)
-                .SingleOrDefault(x => x.Email == email);
+                .SingleOrDefault(x => x.Persons.Any(c => c.Email == email));
 
-            if (person == null) { return new List<Installment>(); }
+            if (livingUnit == null) { return new List<Installment>(); }
 
-            return person.Installments
+            return livingUnit.Installments
                 .OrderByDescending(x => x.When);
         }
 

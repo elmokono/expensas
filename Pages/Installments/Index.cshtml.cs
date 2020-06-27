@@ -72,7 +72,7 @@ namespace ExpensasAbbinatura.Pages.Installments
         {
             var installment = _context.Installments.Find(installmentId);
             installment.Status = _context.InstallmentStatus.Find(installmentStatusId);
-            _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
         IOrderedQueryable<Installment> GetInstallments()
@@ -83,8 +83,9 @@ namespace ExpensasAbbinatura.Pages.Installments
                     .ThenInclude(x => x.Concept)
                     .ThenInclude(x => x.ConceptType)
                 .Include(x => x.Status)
-                .Include(x => x.Person)
-                .Where(x => x.Person.Email == User.FindFirst(System.Security.Claims.ClaimTypes.Email).Value)
+                .Include(x => x.LivingUnit)
+                    .ThenInclude(x => x.Persons)
+                .Where(x => x.LivingUnit.Persons.Any(c => c.Email == User.FindFirst(System.Security.Claims.ClaimTypes.Email).Value))
                 .Where(x => x.When.Year == SelectedYear)
                 .OrderBy(x => x.When);
         }

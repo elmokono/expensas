@@ -10,9 +10,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
+//using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 namespace ExpensasAbbinatura
 {
@@ -33,7 +35,8 @@ namespace ExpensasAbbinatura
                     .AddRazorRuntimeCompilation();
 
             services.AddDbContext<ExpensasContext>(
-                options => options.UseMySQL(Configuration.GetConnectionString("ExpensasContext"))
+                options => options.UseMySql(Configuration.GetConnectionString("ExpensasContext"), 
+                    mysqlOptions => mysqlOptions.ServerVersion(new Version(8, 0, 18), ServerType.MySql))
             );
 
             services.AddScoped<ExpensasAbbinatura.Security.IUserManager, ExpensasAbbinatura.Security.UserManager>();
