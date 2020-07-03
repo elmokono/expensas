@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 //using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -36,7 +35,7 @@ namespace ExpensasAbbinatura
                     .AddRazorRuntimeCompilation();
 
             services.AddDbContext<ExpensasContext>(
-                options => options.UseMySql(Configuration.GetConnectionString("ExpensasContext"),
+                options => options.UseMySql(Configuration.GetConnectionString("ExpensasContext"), 
                     mysqlOptions => mysqlOptions.ServerVersion(new Version(8, 0, 18), ServerType.MySql))
             );
 
@@ -70,14 +69,7 @@ namespace ExpensasAbbinatura
                 app.UseExceptionHandler("/Error");
             }
 
-            //github
-            var provider = new FileExtensionContentTypeProvider();
-            provider.Mappings[".revision"] = "application/x-msdownload";
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                ServeUnknownFileTypes = true,
-                ContentTypeProvider = provider
-            });
+            app.UseStaticFiles();
 
             app.UseRouting();
 
@@ -89,10 +81,10 @@ namespace ExpensasAbbinatura
             app.UseAuthentication();
 
             app.UseAuthorization();
-
+            
             var cookiePolicyOptions = new CookiePolicyOptions
             {
-                MinimumSameSitePolicy = SameSiteMode.Strict,
+                MinimumSameSitePolicy = SameSiteMode.Strict,                
             };
             app.UseCookiePolicy(cookiePolicyOptions);
 
@@ -100,10 +92,6 @@ namespace ExpensasAbbinatura
             {
                 endpoints.MapRazorPages();
             });
-
-
-
-
         }
     }
 }
