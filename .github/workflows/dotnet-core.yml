@@ -39,4 +39,3 @@ jobs:
         local_path: /home/runner/work/expensas/expensas/bin/Debug/netcoreapp3.1/publish/
         remote_path: /www/publish
         ignore: .github/**
-        remote_revision: 0
