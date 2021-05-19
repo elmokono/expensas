@@ -20,6 +20,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore ExpensasAbbinatura.csproj
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build ExpensasAbbinatura.csproj --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test ExpensasAbbinatura.csproj --no-build --verbosity normal
